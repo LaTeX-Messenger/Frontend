@@ -1,0 +1,24 @@
+body, html, #root {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* 스플래시 화면 */
+.splash-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #202225;
+  color: white;
+  font-size: 2rem;
+  animation: fadeOut 2s forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  70% { opacity: 1; }  /* 처음엔 유지 */
+  100% { opacity: 0; } /* 끝날 때 사라짐 */
+}

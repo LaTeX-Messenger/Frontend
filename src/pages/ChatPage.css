@@ -1,0 +1,235 @@
+body, html, #root {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* 전체 레이아웃 */
+.app {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;  /* 가로 스크롤 제거 */
+}
+
+/* 왼쪽 사이드바 */
+.sidebar {
+  width: 320px; /* 좀 넓게 */
+  background-color: #2f3136;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* 상단 프로필 + 설정 */
+.sidebar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 프로필 왼쪽, 버튼 오른쪽 */
+  padding: 12px;
+  border-bottom: 1px solid #444;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+}
+
+.profile img {
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.username {
+  font-weight: bold;
+}
+
+/* 설정 버튼 */
+.settings-btn {
+  background: transparent; /* 투명 */
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* 채널 목록 */
+
+.channels h3,
+.dms h3 {
+  font-size: 1.2rem;   /* 기본보다 크게 */
+  font-weight: bold;
+  margin-bottom: 8px;  /* 글자와 목록 사이 간격 */
+}
+
+.channels, .dms {
+  padding: 12px 0 12px 20px; /* 왼쪽에 여백 추가 */
+}
+
+.channels ul, .dms ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.channels li, .dms li {
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+/* 오른쪽 채팅창 */
+.chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #36393f;
+  color: white;
+}
+
+/* 채팅창 상단 */
+.chat-header {
+  padding: 12px;
+  background-color: #202225;
+  font-weight: bold;
+  border-bottom: 1px solid #444;
+}
+
+.chat-messages {
+  flex-grow: 1;
+  padding: 16px;
+  overflow-y: auto;       /* 세로 스크롤만 */
+  overflow-x: hidden;     /* 가로 스크롤 없앰 */
+  display: flex;
+  flex-direction: column;
+}
+
+/* 메시지 줄 */
+.message-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+  max-width: 65%;
+  position: relative;
+}
+
+.message-row.me {
+  align-self: flex-end;
+  text-align: right;
+}
+
+.message-row.other {
+  align-self: flex-start;
+  text-align: left;
+}
+
+/* 보낸 사람 이름 */
+.sender {
+  font-size: 0.8rem;
+  color: #bbb;
+  margin-bottom: 4px;
+}
+
+/* 말풍선 */
+.message-bubble {
+  background-color: #5865f2;
+  color: white;
+  padding: 0px 15px;
+  border-radius: 16px;
+  position: relative;
+  display: inline-block;
+}
+
+/* 상대방 말풍선 */
+.message-row.other .message-bubble {
+  background-color: #2f3136;
+}
+
+/* 꼬리 (내 메시지 → 오른쪽) */
+.message-row.me .message-bubble::after {
+  content: "";
+  position: absolute;
+  right: -10px;   /* 꼬리가 커지면 위치도 조금 옮겨줘야 자연스러움 */
+  top: 8px;
+  border-width: 8px 0 8px 14px;
+  border-style: solid;
+  border-color: transparent transparent transparent #5865f2;
+}
+
+/* 꼬리 (상대 메시지 → 왼쪽) */
+.message-row.other .message-bubble::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 8px;
+  border-width: 8px 14px 8px 0;
+  border-style: solid;
+  border-color: transparent #2f3136 transparent transparent;
+}
+
+/* 입력창 */
+.chat-input {
+  display: flex;
+  border-top: 1px solid #444;
+  padding: 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 20px;
+  border: 1px solid white;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+  outline: none;
+}
+
+.chat-input button {
+  margin-left: 8px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 20px;
+  background-color: #5865f2;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* 상태 점 기본 */
+.status-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background-color: gray; /* 기본 회색 (오프라인) */
+}
+
+/* 온라인 상태 */
+.status-dot.online {
+  background-color: #3ba55d; /* Discord/Slack 스타일의 초록색 */
+}
+
+/* 프로필 컨테이너 */
+.profile {
+  display: flex;
+  align-items: center;
+}
+
+/* 프로필 이미지 크기 줄이기 */
+.profile-img {
+  width: 40px;   /* 원하는 크기로 조절 (예: 40px) */
+  height: 40px;
+  border-radius: 50%; /* 동그랗게 */
+  margin-right: 20px;
+}
+
+/* 이름 글자 크기 키우기 */
+.username {
+  font-size: 1.2rem;  /* 기본보다 크게 */
+  font-weight: bold;
+}
+
+
