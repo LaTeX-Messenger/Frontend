@@ -1,54 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./ChatPage.css";
 import Message from "../components/Message";
 import myProfile from "../assets/profile.png";
+import { loadChat, sendChat } from "../api";
 
-function ChatPage() {
+function ChatPage({userId}) {
   const location = useLocation();
   const username = location.state?.username || "나";
-  const [messages, setMessages] = useState([
-    { sender: "김태현", text: "그리스 문자들: $$α + β = γ$$ 그리고 $$π ≈ 3.14$$" },
-    { sender: "정유진", text: "간단한 합계: $1+2+3=6$ 그리고 지수: $2^3=8$" },
-    { sender: "나", text: "안녕하세요" },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
-    const sendMessage = () => {
-    if (input.trim() === "") return;
-    // 여기서는 sender를 "나"로 고정
-    setMessages([...messages, { sender: "나", text: input }]);
-    setInput("");
-  };
-  /*const [ws, setWs] = useState(null);
-
+    // 처음 들어오면 채팅 기록 불러오기
     useEffect(() => {
-    // WebSocket 연결
-    const socket = new WebSocket("ws://localhost:3000"); // 팀원이 만든 서버 주소로 바꾸기
-    setWs(socket);
-
-    socket.onopen = () => {
-      console.log("✅ WebSocket 연결됨");
-    };
-
-    socket.onmessage = (event) => {
-      // 서버에서 받은 메시지를 추가
-      setMessages((prev) => [...prev, event.data]);
-    };
-
-    socket.onclose = () => {
-      console.log("❌ WebSocket 연결 끊김");
-    };
-
-    return () => socket.close(); // 컴포넌트 종료 시 연결 닫기
+    async function fetchMessages() {
+      const data = await loadChat();
+      setMessages(data);
+    }
+    fetchMessages();
   }, []);
 
-  const sendMessage = () => {
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(input);
-      setInput("");
-    }
-  };*/
+    const handleSend = async () => {
+      //console.log("fuck you");
+    if (!input.trim()) return;
+
+    const newMsg = await sendChat(userId, input);
+    setMessages(prev=>[...prev, newMsg]);
+    setInput("");
+  };
 
   return (
     <div className="app">
@@ -89,7 +68,7 @@ function ChatPage() {
         <div className="chat-header"># 일반</div>
         <div className="chat-messages">
           {messages.map((msg, i) => (
-            <Message key={i} sender={msg.sender} text={msg.text} />
+            <Message key={i} sender={msg.userId} text={msg.content} />
         ))}
         </div>
         <div className="chat-input">
@@ -98,9 +77,9 @@ function ChatPage() {
             placeholder="메시지를 입력하세요..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()} // 엔터 전송
+            onKeyDown={(e) => e.key === "Enter" && handleSend()} // 엔터 전송
           />
-          <button onClick={sendMessage}>전송</button>
+          <button onClick={handleSend}>전송</button>
         </div>
       </div>
     </div>

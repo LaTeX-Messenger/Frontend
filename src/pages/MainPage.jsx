@@ -1,25 +1,36 @@
+import "./MainPage.css";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { checkSession } from "../api";
 
 function MainPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 세션 확인 로직은 지금은 사용 안 함
-    const timer = setTimeout(() => {
-      navigate("/login");   // 2초 후 무조건 로그인 페이지로 이동
-    }, 2000);
-
-    return () => clearTimeout(timer);
+    async function verify() {
+      try {
+        const data = await checkSession();
+        if (data.authenticated) {
+          navigate("/chat");
+        } else {
+          navigate("/login");
+        }
+      } catch (e) {
+        console.error("세션 확인 에러:", e);
+        navigate("/login");
+      }
+    }
+    verify();
   }, [navigate]);
 
   return (
-    <div className="splash-screen">
-      <h1>LaTeX 🔢</h1>
-      <p>Loading...</p>
+    <div className="main-page">
+      <h1>LaTeX🔢</h1>
+      <div className="spinner"></div>
     </div>
   );
 }
 
 export default MainPage;
+
 

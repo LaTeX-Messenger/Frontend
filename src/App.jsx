@@ -1,19 +1,23 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
 import ChatPage from "./pages/ChatPage";
-import MainPage from "./pages/MainPage";   // 메인 페이지 추가
-import "./App.css";
 
 function App() {
+  const [userId, setUserId] = useState(null); // ✅ 전역 userId 상태
+
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainPage />} />   {/* 메인 페이지 */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/" element={<MainPage setUserId={setUserId} />} />
+        <Route path="/login" element={<LoginPage setUserId={setUserId} />} />
+        <Route path="/chat" element={<ChatPage userId={userId} />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
 export default App;
+
+
