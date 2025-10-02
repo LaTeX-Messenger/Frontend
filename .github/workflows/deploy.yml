@@ -1,0 +1,43 @@
+name: Frontend Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: [home-test, linux, x64]
+
+    permissions:
+      contents: write
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Deploy Frontend
+      run: |
+        PROJECT_DIR=~/projects/Frontend
+        REPO_URL=https://github.com/LaTeX-Messenger/Frontend.git
+
+        if [ ! -d "$PROJECT_DIR" ]; then
+          git clone "$REPO_URL" "$PROJECT_DIR"
+        else
+          cd "$PROJECT_DIR"
+          git fetch origin main
+          git reset --hard origin/main
+        fi
+
+        cd "$PROJECT_DIR"
+
+        podman stop frontend || true
+        podman rm frontend || true
+        podman rmi frontend || true
+
+        podman build -t frontend -f dockerfile .
+
+        podman run -d -p 1080:80 --name frontend frontend
