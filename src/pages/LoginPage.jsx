@@ -13,7 +13,7 @@ function LoginPage({setUserId}) {
 
     const res = await login(username, password);
 
-    if (res.success) {   // 서버 응답에 맞게 조건 수정 필요
+    if (res.authenticated) {   // 서버 응답에 맞게 조건 수정 필요
       setUserId(res.userId);
       navigate("/chat");
     } else {
